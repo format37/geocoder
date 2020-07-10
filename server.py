@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 import asyncio
 from aiohttp import web
-import urllib
-import urllib.parse
-from urllib.parse import urlparse, parse_qsl
-import multidict as MultiDict
 import requests
-from map_gen import map_generator
 
 async def addr_to_geo(request):
 	addr	= request.rel_url.query['addr']
