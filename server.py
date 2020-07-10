@@ -3,7 +3,7 @@ import asyncio
 from aiohttp import web
 import requests
 
-async def addr_to_geo(request):
+async def call_addr_to_geo(request):
 	addr	= request.rel_url.query['addr']
 	content = addr	
 	return web.Response(text=content,content_type="text/html")
