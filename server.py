@@ -2,10 +2,25 @@
 import asyncio
 from aiohttp import web
 import requests
+import pandas as pd
+from geopy.geocoders import Nominatim
+from geopy.extra.rate_limiter import RateLimiter
 
 async def call_addr_to_geo(request):
 	addr	= request.rel_url.query['addr']
-	content = addr	
+	df = pd.DataFrame({'name': [
+		addr
+	]})
+	geolocator = Nominatim(user_agent="ice_geo")
+	geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1)
+	df['location'] = df['name'].apply(geocode)
+	df['point'] = df['location'].apply(lambda loc: tuple(loc.point) if loc else None)
+
+	content = ''
+	for i in df['point']:
+		content = str(int(i[0]*1000000))+';'+str(int(i[1]*1000000))
+		break
+		
 	return web.Response(text=content,content_type="text/html")
 
 async def call_check(request):	
