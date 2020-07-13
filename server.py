@@ -16,10 +16,11 @@ async def call_addr_to_geo(request):
 	df['location'] = df['name'].apply(geocode)
 	df['point'] = df['location'].apply(lambda loc: tuple(loc.point) if loc else None)
 
-	content = ''
+	content = '00000000;00000000'
 	for i in df['point']:
-		content = str(int(i[0]*1000000))+';'+str(int(i[1]*1000000))
-		break
+		if i!=None:
+			content = str(int(i[0]*1000000))+';'+str(int(i[1]*1000000))
+			break
 		
 	return web.Response(text=content,content_type="text/html")
 
